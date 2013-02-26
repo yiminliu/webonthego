@@ -18,7 +18,6 @@ import org.springframework.stereotype.Component;
 
 import com.trc.user.User;
 import com.trc.user.account.AccountDetail;
-import com.trc.user.activation.Registration;
 import com.trc.user.contact.Address;
 import com.tscp.mvne.Account;
 import com.tscp.mvne.CreditCard;
@@ -215,11 +214,11 @@ public class LoggingAspect {
 			clazz = account.getClass().getSimpleName();
 			id = Integer.toString(account.getAccountNo());
 			descriptor = account.getFirstname() + " " + account.getLastname();
-		} else if (arg instanceof com.trc.user.activation.Registration) {
-			Registration registration = (Registration) arg;
-			clazz = registration.getClass().getSimpleName();
-			id = Integer.toString(registration.getUser().getUserId());
-			descriptor = registration.getUser().getUsername();
+		//} else if (arg instanceof com.trc.user.activation.Registration) {
+			//Registration registration = (Registration) arg;
+		//	clazz = registration.getClass().getSimpleName();
+		//	id = Integer.toString(registration.getUser().getUserId());
+		//	descriptor = registration.getUser().getUsername();
 		} else if (arg instanceof com.trc.user.account.AccountDetail) {
 			AccountDetail accountDetail = (AccountDetail) arg;
 			clazz = accountDetail.getClass().getSimpleName();
