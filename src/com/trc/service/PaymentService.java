@@ -15,6 +15,8 @@ import com.trc.web.session.SessionManager;
 import com.tscp.mvne.Account;
 import com.tscp.mvne.CreditCard;
 import com.tscp.mvne.CustPmtMap;
+import com.tscp.mvne.PaymentException_Exception;
+import com.tscp.mvne.PaymentTransaction;
 import com.tscp.mvne.PaymentUnitResponse;
 import com.tscp.mvne.TSCPMVNA;
 
@@ -173,5 +175,13 @@ public class PaymentService implements PaymentServiceModel {
 			throw new PaymentServiceException(e.getMessage(), e.getCause());
 		}
 	}
+	
+	 public PaymentTransaction getPaymentTransaction(int custId, int transId) throws PaymentServiceException {
+		    try {
+		      return port.getPaymentTransaction(custId, transId);
+		    } catch (PaymentException_Exception e) {
+		      throw new PaymentServiceException(e);
+		    }
+		  }
 
 }
