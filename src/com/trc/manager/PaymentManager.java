@@ -15,6 +15,7 @@ import com.trc.web.session.cache.CacheManager;
 import com.tscp.mvne.Account;
 import com.tscp.mvne.CreditCard;
 import com.tscp.mvne.CustPmtMap;
+import com.tscp.mvne.PaymentTransaction;
 import com.tscp.mvne.PaymentUnitResponse;
 import com.tscp.util.logger.LogLevel;
 import com.tscp.util.logger.aspect.Loggable;
@@ -233,5 +234,13 @@ public class PaymentManager implements PaymentManagerModel {
 		}
 		return null;
 	}
+	
+	public PaymentTransaction getPaymentTransaction(int custId, int transId) throws PaymentManagementException {
+	    try {
+	      return paymentService.getPaymentTransaction(custId, transId);
+	    } catch (PaymentServiceException e) {
+	      throw new PaymentManagementException(e);
+	    }
+	  }
 
 }
