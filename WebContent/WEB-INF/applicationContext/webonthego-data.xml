@@ -36,6 +36,9 @@
         <value>com.trc.domain.ticket.CustomerTicket</value>
         <value>com.trc.domain.ticket.InquiryTicket</value>
         <value>com.trc.domain.ticket.AgentTicket</value>
+        <!-- REFUND CLASSES -->
+        <value>com.trc.domain.refund.RefundCode</value>
+        <value>com.trc.domain.refund.RefundRequest</value>
       </list>
     </property>
     <property name="hibernateProperties">
