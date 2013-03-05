@@ -9,7 +9,6 @@ import com.trc.domain.refund.RefundCode;
 import com.trc.domain.refund.RefundRequest;
 import com.trc.exception.management.RefundManagementException;
 import com.trc.exception.service.RefundServiceException;
-import com.trc.manager.UserManager;
 import com.trc.service.RefundService;
 import com.trc.user.User;
 
