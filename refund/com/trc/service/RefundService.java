@@ -23,18 +23,10 @@ import com.tscp.mvne.TSCPMVNA;
 @Service
 public class RefundService {
   private TSCPMVNA port;
-
+  
   @Autowired
   public void init(WebserviceGateway gateway) {
     this.port = gateway.getPort();
-  }
-
-  public List<KenanPayment> getPayments(Account account) throws RefundServiceException {
-    try {
-      return port.getKenanPayments(account);
-    } catch (WebServiceException e) {
-      throw new RefundServiceException(e.getMessage(), e.getCause());
-    }
   }
 
   public void applyCredit(CreditCard creditCard, Double amount) throws RefundServiceException {
@@ -64,11 +56,13 @@ public class RefundService {
 	    try {
 	        port.refundPayment(accountNo, amount, trackingId, refundBy, refundCode, notes);
 	    } 
-      catch (WebServiceException we) {
+        catch (WebServiceException we) {
+    	     System.out.println("WebException ocured: " + we.getMessage());  
 	         throw new RefundServiceException(we.getMessage(), we.getCause());
 	    }
       catch (Exception e) {
           throw new RefundServiceException(e.getMessage());
       }
-}
+  }
+  
 }

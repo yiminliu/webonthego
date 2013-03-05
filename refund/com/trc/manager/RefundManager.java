@@ -1,7 +1,5 @@
 package com.trc.manager;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,47 +18,27 @@ import com.tscp.util.logger.aspect.Loggable;
 
 @Component
 public class RefundManager implements RefundManagerModel {
-  //@Autowired
-  //private PaymentService paymentService;
   @Autowired
   private RefundService refundService;
-  @Autowired
-  private UserManager userManager;
-
-  /*public PaymentTransaction getPaymentTransaction(int custId, int transId) throws PaymentManagementException {
-    try {
-      return paymentService.getPaymentTransaction(custId, transId);
-    } catch (PaymentServiceException e) {
-      throw new PaymentManagementException(e);
-    }
-  }
-   
-
-  @Loggable(value = LogLevel.TRACE)
-  @PreAuthorize("isAuthenticated() and hasPermission(#user, 'canRefund')")
-  public void refundPayment(int accountNo, String amount, String trackingId, RefundCode refundCode, String notes) throws PaymentManagementException {
-    try {
-      refundService.refundPayment(accountNo, amount, Integer.parseInt(trackingId), userManager.getCurrentUser(), refundCode, notes);
-    } catch (PaymentServiceException e) {
-      throw new PaymentManagementException(e.getMessage(), e.getCause());
-    }
-  }
-  */
+  
   @Loggable(value = LogLevel.TRACE)
   @PreAuthorize("isAuthenticated() and hasPermission(#user, 'canRefund')")
   public void refundPayment(int accountNo, String amount, String trackingId, User user, RefundCode refundCode, String notes) throws RefundManagementException {
-    try {
+     try {
         refundService.refundPayment(accountNo, amount, Integer.parseInt(trackingId), user.getUsername(), refundCode.getValue(), notes);
-    } 
-    catch (RefundServiceException e) {
-      throw new RefundManagementException(e.getMessage(), e.getCause());
-    }
+     } 
+     catch (RefundServiceException e) {
+        throw new RefundManagementException(e.getMessage(), e.getCause());
+     }
   }
     
+  @PreAuthorize("isAuthenticated() and hasPermission(#user, 'canRefund')")
   public void refundPayment(User user, RefundRequest paymentRefund) throws RefundManagementException {
-    refundPayment(paymentRefund.getPaymentTransaction().getAccountNo(), paymentRefund.getPaymentTransaction().getPaymentAmount(), 
-    		      String.valueOf(paymentRefund.getPaymentTransaction().getBillingTrackingId()), 
-    		      user, paymentRefund.getRefundCode(), paymentRefund.getNotes());
+     refundPayment(paymentRefund.getPaymentTransaction().getAccountNo(), 
+    		       paymentRefund.getPaymentTransaction().getPaymentAmount(), 
+    		       String.valueOf(paymentRefund.getPaymentTransaction().getBillingTrackingId()), 
+    		       user, paymentRefund.getRefundCode(), paymentRefund.getNotes());
   }
+
   
 }
