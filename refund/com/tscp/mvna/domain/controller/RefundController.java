@@ -5,6 +5,7 @@ import java.util.Arrays;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -51,7 +52,8 @@ public class RefundController {
   protected void refundReferenceData(ModelMap modelMap) {
     modelMap.addAttribute("refundCodes", Arrays.asList(RefundCode.values()));
   }
-
+  
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
   @RequestMapping(value = "{transId}", method = RequestMethod.GET)
   public ModelAndView showRefund(@PathVariable int transId) {
     ResultModel resultModel = new ResultModel("/account/payment/refund/confirm");
@@ -68,6 +70,7 @@ public class RefundController {
     }
   }
 
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
   @RequestMapping(value = "{transId}", method = RequestMethod.POST)
   public ModelAndView processRefund(HttpServletRequest request, @ModelAttribute RefundRequest refundRequest, BindingResult result) {
       ResultModel resultModel = new ResultModel("redirect:/account/payment/history", "/account/payment/refund/confirm");
