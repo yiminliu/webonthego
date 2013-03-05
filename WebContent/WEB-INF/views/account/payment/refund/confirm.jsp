@@ -38,7 +38,8 @@
             <b>User:</b> ${sessionScope.user.username}<br/> 
             <b>Amount:</b> $<fmt:formatNumber value="${refundRequest.paymentTransaction.paymentAmount}" pattern="0.00" /><br/> 
             <b>Account:</b> ${refundRequest.paymentTransaction.accountNo}<br/> 
-            <b>Date:</b> ${refundRequest.paymentTransaction.paymentUnitDate}<br/> 
+            <b>Date:</b> ${refundRequest.paymentTransaction.paymentUnitDate.month}/${refundRequest.paymentTransaction.paymentUnitDate.day}/${refundRequest.paymentTransaction.paymentUnitDate.year}
+              ${refundRequest.paymentTransaction.paymentUnitDate.hour}:<fmt:formatNumber value="${refundRequest.paymentTransaction.paymentUnitDate.minute}" pattern="00" /><br/>
             <b>Method:</b> ${refundRequest.paymentTransaction.paymentMethod} ${refundRequest.paymentTransaction.paymentSource}
           </div>
 
@@ -106,11 +107,9 @@
             <form:input cssClass="span-8" cssErrorClass="span-8 validationFailed" autocomplete="off" path="jcaptcha" />
           </div>
 
-
           <!-- Buttons -->
           <div class="buttons">
-            <a id="refundButton" href="#" class="button action-m multi"><span>Refund</span> </a> <input
-              id="refundSubmit" type="submit" name="_eventId_submit" value="Continue" class="hidden" />
+               <input id="refundSubmit" type="submit" name="_eventId_submit" value="Continue"/>
           </div>
         </form:form>
       </div>
