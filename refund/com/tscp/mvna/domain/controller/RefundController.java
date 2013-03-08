@@ -62,7 +62,6 @@ public class RefundController {
       PaymentTransaction paymentTransaction = paymentManager.getPaymentTransaction(user.getUserId(), transId);
       RefundRequest refundRequest = new RefundRequest();
       refundRequest.setPaymentTransaction(paymentTransaction);
-      //refundRequest.setSessionToken(SessionManager.createToken(SessionRequest.REFUND, "refund transaction " + transId));
       resultModel.addAttribute("refundRequest", refundRequest);
       return resultModel.getSuccess();
     } catch (PaymentManagementException e) {
@@ -72,20 +71,17 @@ public class RefundController {
 
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @RequestMapping(value = "{transId}", method = RequestMethod.POST)
-  public ModelAndView processRefund(HttpServletRequest request, @ModelAttribute RefundRequest refundRequest, BindingResult result) {
+  public ModelAndView processRefund(HttpServletRequest request, @ModelAttribute RefundRequest refundRequest, BindingResult result, @PathVariable int transId) {
       ResultModel resultModel = new ResultModel("redirect:/account/payment/history", "/account/payment/refund/confirm");
-      User user = userManager.getCurrentUser();
-      //SessionToken token = SessionManager.fetchToken(refundRequest.getSessionToken().getRequest());
-      //if (token != null && token.getId().equals(refundRequest.getSessionToken().getId())) {
+      User user = userManager.getCurrentUser(); 
       JCaptchaValidator.validate(request, result);
       refundRequestValidator.validate(refundRequest, result);
       if (result.hasErrors()) {
          DevLogger.log("refundController.processRefund() has errors " + result.getAllErrors().toString());
          return resultModel.getError();
       } else {
-        //token.consume();
          try {
-           refundManager.refundPayment(user, refundRequest);
+           refundManager.refundPayment(user, refundRequest, transId);
            PaymentHistory paymentHistory = new PaymentHistory(accountManager.getPaymentRecords(user), user);
            new CacheManager().set(CacheKey.PAYMENT_HISTORY, paymentHistory);               
          } catch (RefundManagementException e) {
@@ -94,9 +90,6 @@ public class RefundController {
       	     return resultModel.getAccessException();
          }
          return resultModel.getSuccess();
-      }
-    //} else {
-      //return resultModel.getAccessException();
-    //}
-  }
+      }    
+  }  
 }
