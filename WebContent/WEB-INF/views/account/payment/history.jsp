@@ -17,8 +17,8 @@
               <th style="text-align: right;">Reverse</th>
             </c:if>
         </tr>
-        <c:forEach var="paymentRecord" items="${PAYMENT_HISTORY.currentPage}">
-          <%@ include file="/WEB-INF/views/include/display/paymentRecord_admin.jsp"%>
+        <c:forEach var="paymentRecord" items="${PAYMENT_HISTORY.currentPage}">        
+           <%@ include file="/WEB-INF/views/include/display/paymentRecord_admin.jsp"%>
         </c:forEach>
       </table>
       <c:set var="prevPageNum" value="${PAYMENT_HISTORY.currentPageNum - 1}" />
