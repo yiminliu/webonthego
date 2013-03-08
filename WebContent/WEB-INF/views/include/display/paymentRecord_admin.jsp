@@ -1,4 +1,4 @@
-<tr>
+<tr> 
   <td>${paymentRecord.paymentDate.month}/${paymentRecord.paymentDate.day}/${paymentRecord.paymentDate.year} ${paymentRecord.paymentDate.hour}:<fmt:formatNumber
       value="${paymentRecord.paymentDate.minute}" pattern="00" /> <c:choose>
       <c:when test="${paymentRecord.paymentDate.hour >= 12}">pm</c:when>
