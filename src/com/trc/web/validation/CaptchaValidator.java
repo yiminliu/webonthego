@@ -12,7 +12,7 @@ public class CaptchaValidator {
 
 	public static void validate(
 			HttpServletRequest request,
-			Errors errors) {
+			Errors errors) { 
 		if (!SimpleImageCaptchaServlet.validateResponse(request, request.getParameter("captcha.value"))) {
 			errors.rejectValue("captcha.value", "jcaptcha.incorrect", "Image Verificaiton failed");
 		}
