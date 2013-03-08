@@ -38,6 +38,7 @@ public class RefundService {
     }
   }
 
+  @Deprecated
   public void reversePayment(Account account, Double amount, Date date, String trackingId)
       throws RefundServiceException {
     try {
@@ -52,16 +53,15 @@ public class RefundService {
     }
   }
   
-  public void refundPayment(int accountNo, String amount, int trackingId, String refundBy, int refundCode, String notes) throws RefundServiceException {
+  public void refundPayment(int accountNo, int transId, String amount, int trackingId, String refundBy, int refundCode, String notes) throws RefundServiceException {
 	    try {
-	        port.refundPayment(accountNo, amount, trackingId, refundBy, refundCode, notes);
-	    } 
-        catch (WebServiceException we) {
-    	     System.out.println("WebException ocured: " + we.getMessage());  
-	         throw new RefundServiceException(we.getMessage(), we.getCause());
+	        port.refundPayment(accountNo, transId, amount, trackingId, refundBy, refundCode, notes);
 	    }
-      catch (Exception e) {
-          throw new RefundServiceException(e.getMessage());
+        catch (WebServiceException we) {
+    	       throw new RefundServiceException("WebServiceException occured: " + we.getMessage(), we.getCause());
+	    }
+        catch (Exception e) {
+               throw new RefundServiceException(e.getMessage(), e.getCause());
       }
   }
   
