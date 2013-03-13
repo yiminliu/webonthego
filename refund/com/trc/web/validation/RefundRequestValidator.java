@@ -20,6 +20,7 @@ public class RefundRequestValidator implements Validator {
   public void validate(Object target, Errors errors) {
     RefundRequest refund = (RefundRequest) target;
     checkRefundCode(refund.getRefundCode(), errors);
+    checkRefundNote(refund.getNotes(), errors);
   }
 
   protected void checkRefundCode(RefundCode refundCode, Errors errors) {
@@ -32,6 +33,6 @@ public class RefundRequestValidator implements Validator {
 	 if (refundNote == null) {
 	    errors.rejectValue("refundNote", "refund.refundNote.required", "You must enter the refund note");
 	 }
-  }
+  }  
 
 }
