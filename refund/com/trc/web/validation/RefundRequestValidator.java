@@ -29,9 +29,9 @@ public class RefundRequestValidator implements Validator {
   }
   
   protected void checkRefundNote(String refundNote, Errors errors) {
-	    if (refundNote == null) {
-	      errors.rejectValue("refundNote", "refund.refundNote.required", "You must enter the refund note");
-	    }
-	  }
+	 if (refundNote == null) {
+	    errors.rejectValue("refundNote", "refund.refundNote.required", "You must enter the refund note");
+	 }
+  }
 
 }
