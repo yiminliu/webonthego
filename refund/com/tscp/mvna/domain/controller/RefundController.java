@@ -31,6 +31,7 @@ import com.trc.web.session.cache.CacheKey;
 import com.trc.web.session.cache.CacheManager;
 import com.trc.web.validation.JCaptchaValidator;
 import com.trc.web.validation.RefundRequestValidator;
+import com.tscp.mvne.CreditCard;
 import com.tscp.mvne.PaymentTransaction;
 import com.tscp.util.logger.DevLogger;
 
@@ -79,11 +80,14 @@ public class RefundController {
       if (result.hasErrors()) {
          DevLogger.log("refundController.processRefund() has errors " + result.getAllErrors().toString());
          return resultModel.getError();
-      } else {
+      } 
+      else {
          try {
-           refundManager.refundPayment(user, refundRequest, transId);
-           PaymentHistory paymentHistory = new PaymentHistory(accountManager.getPaymentRecords(user), user);
-           new CacheManager().set(CacheKey.PAYMENT_HISTORY, paymentHistory);               
+        	 if(isRefundable(refundRequest.getPaymentTransaction())) {
+                refundManager.refundPayment(user, refundRequest, transId);
+        	 }   
+             PaymentHistory paymentHistory = new PaymentHistory(accountManager.getPaymentRecords(user), user);
+             new CacheManager().set(CacheKey.PAYMENT_HISTORY, paymentHistory);  //need to refresh "PAYMENT_HISTORY" in cache              
          } catch (RefundManagementException e) {
         	 return resultModel.getAccessException();
          } catch (AccountManagementException e) {
@@ -92,4 +96,20 @@ public class RefundController {
          return resultModel.getSuccess();
       }    
   }  
+  
+  private boolean isRefundable(PaymentTransaction paymentTransaction) throws RefundManagementException {
+	  CreditCard creditCard = null;
+	  if (paymentTransaction.getTransId() < 0)
+	  	  throw new RefundManagementException("Unable to refund because no valid Transaction ID found.");
+	  
+	  if (paymentTransaction.getBillingTrackingId() < 0)
+		  throw new RefundManagementException("Unable to refund because no valid Billing Tracking ID found.");
+	  try{
+		  paymentManager.getCreditCard(paymentTransaction.getPmtId());
+	  } catch(PaymentManagementException pe){
+		  throw new RefundManagementException("Unable to refund because error occured while getting credit card information: " + pe.getMessage());
+ 	  }
+	  return creditCard != null;
+  }
+
 }
