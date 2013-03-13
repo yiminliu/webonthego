@@ -3,9 +3,7 @@ package com.trc.hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-
-import sun.security.krb5.internal.Ticket;
-
+import com.trc.domain.ticket.Ticket;
 import com.trc.domain.ticket.TicketNote;
 import com.trc.user.User;
 import com.trc.user.authority.Authority;
