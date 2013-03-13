@@ -24,8 +24,14 @@ public class RefundRequestValidator implements Validator {
 
   protected void checkRefundCode(RefundCode refundCode, Errors errors) {
     if (refundCode.equals(RefundCode.UNSELECTED)) {
-      errors.rejectValue("refundCode", "payment.refund.refundCode.required", "You must choose a refund code");
+      errors.rejectValue("refundCode", "refund.refundCode.required", "You must choose a refund code");
     }
   }
+  
+  protected void checkRefundNote(String refundNote, Errors errors) {
+	    if (refundNote == null) {
+	      errors.rejectValue("refundNote", "refund.refundNote.required", "You must enter the refund note");
+	    }
+	  }
 
 }
