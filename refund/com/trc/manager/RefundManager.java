@@ -19,25 +19,28 @@ import com.tscp.util.logger.aspect.Loggable;
 public class RefundManager implements RefundManagerModel {
   @Autowired
   private RefundService refundService;
+        
+  @PreAuthorize("isAuthenticated() and hasPermission(#user, 'canRefund')")
+  public void refundPayment(User user, RefundRequest paymentRefund, int transId) throws RefundManagementException {
+	 synchronized(paymentRefund.getPaymentTransaction()) {
+        refundPayment(paymentRefund.getPaymentTransaction().getAccountNo(), 
+        transId, 
+        paymentRefund.getPaymentTransaction().getPaymentAmount(), 
+        String.valueOf(paymentRefund.getPaymentTransaction().getBillingTrackingId()), 
+    	user, 
+    	paymentRefund.getRefundCode(), 
+    	paymentRefund.getNotes());
+	 }   
+  }
   
   @Loggable(value = LogLevel.TRACE)
-  @PreAuthorize("isAuthenticated() and hasPermission(#user, 'canRefund')")
-  public void refundPayment(int accountNo, int transId, String amount, String trackingId, User user, RefundCode refundCode, String notes) throws RefundManagementException {
+  private void refundPayment(int accountNo, int transId, String amount, String trackingId, User user, RefundCode refundCode, String notes) throws RefundManagementException {
      try {
         refundService.refundPayment(accountNo, transId, amount, Integer.parseInt(trackingId), user.getUsername(), refundCode.getValue(), notes);
      } 
      catch (RefundServiceException e) {
         throw new RefundManagementException(e.getMessage(), e.getCause());
      }
-  }
-    
-  @PreAuthorize("isAuthenticated() and hasPermission(#user, 'canRefund')")
-  public void refundPayment(User user, RefundRequest paymentRefund, int transId) throws RefundManagementException {
-     refundPayment(paymentRefund.getPaymentTransaction().getAccountNo(), 
-    		       transId,
-    		       paymentRefund.getPaymentTransaction().getPaymentAmount(), 
-    		       String.valueOf(paymentRefund.getPaymentTransaction().getBillingTrackingId()), 
-    		       user, paymentRefund.getRefundCode(), paymentRefund.getNotes());
   }
 
   
